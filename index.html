@@ -3,567 +3,701 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Informasi Akademik & Ujian Profesional</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* === TEMA ESTETIK & PROFESIONAL === */
-        :root {
-            --primary: #0f172a;
-            --secondary: #3b82f6;
-            --accent: #f59e0b;
-            --danger: #ef4444;
-            --success: #10b981;
-            --bg-light: #f8fafc;
-            --text-dark: #1e293b;
-            --border: #e2e8f0;
+    <title>Portal Akademik & Ujian - SMK SWASTA ASSISI</title>
+    <!-- Tailwind CSS untuk desain profesional & estetik -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome untuk Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#e3242b', primaryDark: '#b91c22', surface: '#f8fafc' },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-light); color: var(--text-dark); }
+    </script>
+    <style>
+        body { -webkit-font-smoothing: antialiased; background-color: #f1f5f9; }
+        .hide-section { display: none !important; }
+        .prevent-select { user-select: none; -webkit-user-select: none; }
+        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         
-        /* TOMBOL GLOBAL */
-        .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; color: #fff; }
-        .btn-primary { background: var(--secondary); }
-        .btn-primary:hover { background: #2563eb; }
-        .btn-danger { background: var(--danger); }
-        .btn-warning { background: var(--accent); }
-        .btn-success { background: var(--success); }
-        
-        /* LOGIN PAGE */
-        #login-page { display: flex; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(135deg, var(--primary), #1e293b); }
-        .login-card { background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); width: 100%; max-width: 400px; }
-        .login-card h2 { text-align: center; margin-bottom: 24px; color: var(--primary); }
-        .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
-        .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; outline: none; }
-        
-        /* DASHBOARD LAYOUT */
-        #dashboard { display: none; display: flex; height: 100vh; overflow: hidden; }
-        
-        /* SIDEBAR */
-        .sidebar { width: 260px; background: var(--primary); color: #fff; display: flex; flex-direction: column; }
-        .sidebar-header { padding: 24px; border-bottom: 1px solid #334155; text-align: center; }
-        .nav-menu { flex: 1; padding: 20px 0; overflow-y: auto; }
-        .nav-item { padding: 12px 24px; cursor: pointer; display: flex; align-items: center; border-left: 4px solid transparent; transition: 0.3s; }
-        .nav-item:hover, .nav-item.active { background: #1e293b; border-left-color: var(--secondary); }
-        .sidebar-footer { padding: 20px; border-top: 1px solid #334155; }
-        
-        /* MAIN CONTENT */
-        .main-content { flex: 1; overflow-y: auto; padding: 30px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: #fff; padding: 15px 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .panel { display: none; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); animation: fadeIn 0.3s ease-in-out; }
-        .panel.active { display: block; }
+        /* Animasi Transisi Halus */
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        h3.section-title { font-size: 20px; border-bottom: 2px solid var(--secondary); padding-bottom: 10px; margin-bottom: 20px; color: var(--primary); display: inline-block; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* TABEL */
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-        th, td { border: 1px solid var(--border); padding: 12px; text-align: left; }
-        th { background-color: var(--bg-light); font-weight: 600; color: var(--primary); }
-        .action-cell { white-space: nowrap; }
+        /* Styling Tabel Estetik */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th { background-color: #f8fafc; color: #475569; font-weight: 600; text-transform: uppercase; font-size: 12px; padding: 12px 16px; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 14px 16px; border-bottom: 1px solid #e2e8f0; font-size: 14px; color: #334155; background: white; }
+        tr:hover td { background-color: #f8fafc; }
         
-        /* HIDE ELEMENT CLASS */
-        .staff-only { display: none; }
-        
-        /* UJIAN UI */
-        .exam-header { background: #fffbeb; border: 1px solid #fde68a; padding: 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-        .timer { font-size: 24px; font-weight: bold; color: var(--danger); }
-        .soal-card { background: #fff; border: 1px solid var(--border); padding: 20px; border-radius: 8px; margin-bottom: 15px; }
-        .soal-card p { font-weight: 600; margin-bottom: 10px; }
-        textarea.isian { width: 100%; height: 80px; padding: 10px; border: 1px solid var(--border); border-radius: 6px; }
-        
-        /* SCANNER PLACEHOLDER */
-        .scanner-ui { background: #000; color: #fff; height: 250px; display: flex; justify-content: center; align-items: center; border-radius: 8px; margin-bottom: 20px; flex-direction: column; }
+        /* Scanner Animasi */
+        .scan-line { width: 100%; height: 2px; background: #e3242b; position: absolute; top: 0; box-shadow: 0 0 10px #e3242b; animation: scanning 2s infinite linear; }
+        @keyframes scanning { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
     </style>
 </head>
-<body>
+<body class="text-slate-800">
 
     <!-- ================= 1. HALAMAN LOGIN ================= -->
-    <div id="login-page">
-        <div class="login-card">
-            <h2>Portal Akademik</h2>
-            <div class="form-group">
-                <label>Login Sebagai:</label>
-                <select class="form-control" id="role-select" onchange="toggleGuruList()">
-                    <option value="siswa">Siswa / Murid</option>
-                    <option value="guru">Guru</option>
-                    <option value="admin">Admin</option>
-                </select>
+    <div id="view-login" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900 p-4 absolute inset-0 z-50 fade-in">
+        <div class="glass-panel p-10 rounded-2xl shadow-2xl w-full max-w-md border-t-8 border-primary relative overflow-hidden">
+            <div class="text-center mb-8">
+                <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-lg">
+                    <i class="fas fa-school"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800">SMK SWASTA ASSISI</h2>
+                <p class="text-slate-500 text-sm mt-1">Portal Ujian & Manajemen Akademik</p>
             </div>
-            <div class="form-group" id="guru-list" style="display: none;">
-                <label>Pilih Nama Guru:</label>
-                <select class="form-control" id="guru-name">
-                    <option value="Sr.Gaudensia Silalahi">1. Sr.Gaudensia Silalahi</option>
-                    <option value="H.Tindaon">2. H.Tindaon</option>
-                    <option value="P.Tambunan">3. P.Tambunan</option>
-                    <option value="E.Sirait">4. E.Sirait</option>
-                    <option value="E.Silalahi">5. E.Silalahi</option>
-                    <option value="A.Lumbantobing">6. A.Lumbantobing</option>
-                    <option value="M.Haloho">7. M.Haloho</option>
-                    <option value="E.Nainggolan">8. E.Nainggolan</option>
-                    <option value="L.Panggabean">9. L.Panggabean</option>
-                    <option value="E.Gultom">10. E.Gultom</option>
-                    <option value="K.Silitonga">11. K.Silitonga</option>
-                    <option value="O.Nadeak">12. O.Nadeak</option>
-                </select>
+            
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Hak Akses</label>
+                    <select id="login-role" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition outline-none" onchange="toggleTeacherSelect()">
+                        <option value="siswa">Siswa / Murid</option>
+                        <option value="guru">Guru Pengajar</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+                
+                <div id="admin-select-group" class="hide-section">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Pilih Admin</label>
+                    <select id="login-admin" class="w-full p-3 border border-slate-300 rounded-lg outline-none">
+                        <option value="Admin 1">Admin 1</option>
+                        <option value="Admin 2">Admin 2</option>
+                        <option value="Admin 3">Admin 3</option>
+                    </select>
+                </div>
+
+                <div id="teacher-select-group" class="hide-section">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Guru</label>
+                    <select id="login-teacher" class="w-full p-3 border border-slate-300 rounded-lg outline-none">
+                        <option value="Sr.Gaudensia Silalahi">1. Sr.Gaudensia Silalahi</option>
+                        <option value="H.Tindaon">2. H.Tindaon</option>
+                        <option value="P.Tambunan">3. P.Tambunan</option>
+                        <option value="E.Sirait">4. E.Sirait</option>
+                        <option value="E.Silalahi">5. E.Silalahi</option>
+                        <option value="A.Lumbantobing">6. A.Lumbantobing</option>
+                        <option value="M.Haloho">7. M.Haloho</option>
+                        <option value="E.Nainggolan">8. E.Nainggolan</option>
+                        <option value="L.Panggabean">9. L.Panggabean</option>
+                        <option value="E.Gultom">10. E.Gultom</option>
+                        <option value="K.Silitonga">11. K.Silitonga</option>
+                        <option value="O.Nadeak">12. O.Nadeak</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">ID / Username</label>
+                    <input type="text" id="login-username" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" placeholder="Masukkan NIS / NIP / Username">
+                </div>
+                
+                <button onclick="prosesLogin()" class="w-full bg-primary hover:bg-primaryDark text-white font-bold py-3.5 px-4 rounded-lg shadow-md transition duration-200 flex items-center justify-center gap-2">
+                    <i class="fas fa-sign-in-alt"></i> MASUK SISTEM
+                </button>
             </div>
-            <div class="form-group" id="admin-list" style="display: none;">
-                <label>Pilih Admin:</label>
-                <select class="form-control" id="admin-name">
-                    <option value="Admin 1">Admin 1</option>
-                    <option value="Admin 2">Admin 2</option>
-                    <option value="Admin 3">Admin 3</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Username / NIS</label>
-                <input type="text" class="form-control" id="username" placeholder="Masukkan Username...">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Masukkan Password...">
-            </div>
-            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="doLogin()">MASUK</button>
         </div>
     </div>
 
-    <!-- ================= DASHBOARD SYSTEM ================= -->
-    <div id="dashboard" style="display: none;">
+    <!-- ================= 2. DASHBOARD APLIKASI ================= -->
+    <div id="view-dashboard" class="hide-section flex h-screen overflow-hidden bg-slate-50">
         
-        <!-- SIDEBAR -->
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h3>Portal Sekolah</h3>
-                <p style="font-size: 12px; margin-top: 5px; color: #94a3b8;" id="user-display">Siswa</p>
-            </div>
-            <div class="nav-menu">
-                <div class="nav-item active" onclick="switchPanel('panel-home')">🏠 HOME</div>
-                <div class="nav-item" onclick="switchPanel('panel-jadwal')">📅 Jadwal Mapel & Ujian</div>
-                <div class="nav-item staff-only" onclick="switchPanel('panel-scan-ujian')">📷 Scan Ujian</div>
-                <div class="nav-item staff-only" onclick="switchPanel('panel-scan-harian')">📷 Scan Harian</div>
-                <div class="nav-item" onclick="switchPanel('panel-materi')">📚 Materi Pelajaran</div>
-                <div class="nav-item" onclick="switchPanel('panel-ujian')">📝 Mulai Ujian</div>
-                <div class="nav-item staff-only" onclick="switchPanel('panel-laporan')">📊 Laporan Nilai</div>
-            </div>
-            <div class="sidebar-footer staff-only">
-                <!-- Tombol Navigasi Ekstra untuk Admin/Guru -->
-                <button class="btn btn-success" style="width: 100%; margin-bottom: 10px;">HOME ADMIN/GURU</button>
-            </div>
-        </div>
-
-        <!-- MAIN CONTENT -->
-        <div class="main-content">
-            <div class="header">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="w-64 bg-white border-r border-slate-200 flex flex-col shadow-sm z-20">
+            <div class="p-5 border-b border-slate-100 flex items-center gap-3">
+                <div class="bg-primary text-white p-2 rounded-lg"><i class="fas fa-graduation-cap"></i></div>
                 <div>
-                    <h2 id="welcome-text">Selamat Datang!</h2>
-                    <p style="color: #64748b; font-size: 14px;">Tahun Ajaran 2026-2027</p>
+                    <h1 class="font-bold text-slate-800 leading-tight">SMK ASSISI</h1>
+                    <span id="badge-role" class="text-[10px] font-bold bg-slate-100 text-primary px-2 py-0.5 rounded-full uppercase tracking-wider"></span>
                 </div>
-                <button class="btn btn-danger staff-only" onclick="logout()">KELUAR (LOGOUT)</button>
             </div>
-
-            <!-- PANEL 1: HOME -->
-            <div id="panel-home" class="panel active">
-                <h3 class="section-title">Beranda</h3>
-                <p>Selamat datang di portal informasi akademik. Silakan pilih menu di samping untuk memulai.</p>
-                <p style="margin-top: 15px; color: #64748b; font-size: 14px;">
-                    <i>Catatan Referensi: Harap sesuaikan data jadwal dengan file <b>roster tp 2026-2027 akl.xlsx</b></i>
-                </p>
-            </div>
-
-            <!-- PANEL 2 & 6: JADWAL MAPEL & UJIAN -->
-            <div id="panel-jadwal" class="panel">
-                <h3 class="section-title">Jadwal Ujian & Mapel (Les 1-10)</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Hari</th>
-                            <th>Tanggal</th>
-                            <th>Tahun</th>
-                            <th>Jadwal Les (1-10) & Mapel</th>
-                            <th>Jadwal Ujian</th>
-                            <th class="staff-only">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- KOSONG: SILAKAN DIISI -->
-                        <tr>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td class="action-cell staff-only">
-                                <button class="btn btn-success">SAVE</button>
-                                <button class="btn btn-warning">EDIT</button>
-                                <button class="btn btn-danger">HAPUS</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- PANEL 3: SCAN KEHADIRAN UJIAN -->
-            <div id="panel-scan-ujian" class="panel">
-                <h3 class="section-title">Scan Kehadiran Mengawas Ujian</h3>
-                <div class="scanner-ui">
-                    <p>📷 [ KAMERA SCAN BARCODE / QR CODE ]</p>
-                    <p style="font-size: 12px; margin-top: 10px;">Arahkan kartu pengawas/siswa ke kamera</p>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Hari</th>
-                            <th>Tanggal</th>
-                            <th>Tahun</th>
-                            <th>Nama Guru/Siswa</th>
-                            <th>Status (Ujian)</th>
-                            <th class="staff-only">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- KOSONG: SILAKAN DIISI -->
-                        <tr>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td class="action-cell staff-only">
-                                <button class="btn btn-success">SAVE</button>
-                                <button class="btn btn-danger">HAPUS</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- PANEL 4: SCAN KEHADIRAN HARIAN -->
-            <div id="panel-scan-harian" class="panel">
-                <h3 class="section-title">Scan Kehadiran Harian</h3>
-                <div class="scanner-ui">
-                    <p>📷 [ KAMERA SCAN HARIAN AKTIF ]</p>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Hari</th>
-                            <th>Tanggal</th>
-                            <th>Tahun</th>
-                            <th>Nama (Guru/Siswa)</th>
-                            <th>Waktu Kehadiran</th>
-                            <th class="staff-only">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- KOSONG: SILAKAN DIISI -->
-                        <tr>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td class="action-cell staff-only">
-                                <button class="btn btn-success">SAVE</button>
-                                <button class="btn btn-warning">EDIT</button>
-                                <button class="btn btn-danger">HAPUS</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- PANEL 5 & 7: MATERI GURU -->
-            <div id="panel-materi" class="panel">
-                <h3 class="section-title">Materi Pelajaran</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Hari</th>
-                            <th>Tanggal</th>
-                            <th>Tahun</th>
-                            <th>Judul Materi</th>
-                            <th>Jenis (Word/Excel/PPT/Video/Gambar)</th>
-                            <th class="staff-only">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- KOSONG: SILAKAN DIISI -->
-                        <tr>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td class="action-cell staff-only">
-                                <button class="btn btn-success">SAVE</button>
-                                <button class="btn btn-warning">EDIT</button>
-                                <button class="btn btn-danger">HAPUS</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- PANEL 8 & 9: UJIAN SEKOLAH (PILIHAN GANDA & ISIAN) -->
-            <div id="panel-ujian" class="panel">
-                <h3 class="section-title">Lembar Kerja Ujian</h3>
+            
+            <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+                <button onclick="navigasi('menu-home', this)" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-primary bg-red-50 transition-colors">
+                    <i class="fas fa-home w-5 text-center"></i> Beranda
+                </button>
+                <button onclick="navigasi('menu-jadwal', this)" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors">
+                    <i class="fas fa-calendar-alt w-5 text-center"></i> Jadwal Akademik
+                </button>
+                <button onclick="navigasi('menu-scan', this)" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors">
+                    <i class="fas fa-qrcode w-5 text-center"></i> Presensi Scan
+                </button>
+                <button onclick="navigasi('menu-materi', this)" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors">
+                    <i class="fas fa-book w-5 text-center"></i> Bank Materi
+                </button>
+                <button onclick="navigasi('menu-ujian', this)" class="nav-btn w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors">
+                    <i class="fas fa-laptop-code w-5 text-center"></i> Portal Ujian
+                </button>
                 
-                <div id="ujian-persiapan">
-                    <p>Status: <b>Menunggu Konfirmasi</b></p>
-                    <br>
-                    <button class="btn btn-primary" onclick="mulaiUjian()">MULAI KERJAKAN SOAL</button>
+                <!-- Hanya Admin & Guru -->
+                <button onclick="navigasi('menu-laporan', this)" class="nav-btn admin-guru-only w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg text-slate-600 hover:bg-slate-50 hover:text-primary transition-colors">
+                    <i class="fas fa-chart-bar w-5 text-center"></i> Laporan Nilai
+                </button>
+            </nav>
+            
+            <div class="p-4 border-t border-slate-100">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-500 font-bold">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <p id="display-name" class="text-sm font-bold text-slate-800 truncate">Nama User</p>
+                        <p class="text-xs text-slate-500">Tahun 2026/2027</p>
+                    </div>
+                </div>
+                <button onclick="prosesLogout()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold rounded-lg text-white bg-slate-800 hover:bg-slate-900 transition-colors shadow-sm">
+                    <i class="fas fa-power-off"></i> KELUAR
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN KONTEN -->
+        <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+            
+            <!-- Topbar (Anti Cheat Warning Box) -->
+            <div id="topbar-warning" class="hide-section bg-primary text-white px-6 py-3 flex justify-between items-center shadow-md z-10">
+                <div class="flex items-center gap-3 font-bold">
+                    <i class="fas fa-shield-alt animate-pulse"></i> KEAMANAN UJIAN AKTIF
+                </div>
+                <div class="text-2xl font-mono font-bold bg-black/20 px-4 py-1 rounded-lg border border-white/20">
+                    <span id="timer-display">00:00</span>
+                </div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-8 relative">
+                
+                <!-- MENU 1: HOME -->
+                <div id="menu-home" class="panel-content fade-in">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
+                        <h2 class="text-2xl font-bold text-slate-800 mb-2">Selamat Datang di Portal Terpadu</h2>
+                        <p class="text-slate-500 mb-6">Kelola jadwal, materi, absensi, dan ujian sekolah dalam satu ekosistem.</p>
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg text-sm text-blue-800">
+                            <strong>Informasi Sistem:</strong> Seluruh baris tabel data telah disiapkan dengan format [kosong] agar staf Admin dan Guru dapat menginput secara independen menggunakan tombol Aksi.
+                        </div>
+                    </div>
                 </div>
 
-                <div id="ujian-berlangsung" style="display: none;">
-                    <div class="exam-header">
+                <!-- MENU 2: JADWAL UJIAN & LES -->
+                <div id="menu-jadwal" class="panel-content hide-section fade-in">
+                    <div class="flex justify-between items-end mb-6">
                         <div>
-                            <strong>Ujian Berlangsung!</strong><br>
-                            <span style="font-size: 12px; color: var(--danger);">*Sistem anti-curang aktif. Dilarang foto soal, rekam layar, atau kembali ke HOME!</span>
+                            <h2 class="text-2xl font-bold text-slate-800">Jadwal Ujian & Les (1-10)</h2>
+                            <p class="text-slate-500 text-sm mt-1">Manajemen jadwal kegiatan belajar dan ujian sekolah.</p>
                         </div>
-                        <div class="timer" id="timer-display">90:00</div>
+                        <button class="admin-guru-only bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition flex items-center gap-2">
+                            <i class="fas fa-plus"></i> Tambah Jadwal
+                        </button>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hari/Tanggal/Tahun</th>
+                                    <th>Kategori</th>
+                                    <th>Mapel / Jam Les</th>
+                                    <th>Lokasi / Kelas / Sesi</th>
+                                    <th>Pengajar / Pengawas</th>
+                                    <th class="admin-guru-only text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>[Hari, Tgl, Tahun]</td>
+                                    <td><span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs font-bold">UJIAN</span></td>
+                                    <td>[Nama Mapel]</td>
+                                    <td>[Kelas / Ruang / Sesi]</td>
+                                    <td>[Nama Pengawas]</td>
+                                    <td class="admin-guru-only text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <button class="bg-emerald-500 hover:bg-emerald-600 text-white w-8 h-8 rounded flex items-center justify-center" title="Save"><i class="fas fa-save"></i></button>
+                                            <button class="bg-amber-500 hover:bg-amber-600 text-white w-8 h-8 rounded flex items-center justify-center" title="Edit"><i class="fas fa-edit"></i></button>
+                                            <button class="bg-slate-800 hover:bg-slate-900 text-white w-8 h-8 rounded flex items-center justify-center" title="Hapus"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>[Hari, Tgl, Tahun]</td>
+                                    <td><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold">LES 1-10</span></td>
+                                    <td>[Nama Mapel] - Jam Les: [Jam]</td>
+                                    <td>[Kelas / Lokasi]</td>
+                                    <td>[Nama Pengajar]</td>
+                                    <td class="admin-guru-only text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <button class="bg-emerald-500 text-white w-8 h-8 rounded flex items-center justify-center"><i class="fas fa-save"></i></button>
+                                            <button class="bg-amber-500 text-white w-8 h-8 rounded flex items-center justify-center"><i class="fas fa-edit"></i></button>
+                                            <button class="bg-slate-800 text-white w-8 h-8 rounded flex items-center justify-center"><i class="fas fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- MENU 3: PRESENSI SCAN -->
+                <div id="menu-scan" class="panel-content hide-section fade-in">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6">Scan Presensi Harian & Pengawas</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        <div class="lg:col-span-1 bg-slate-900 rounded-xl overflow-hidden relative h-64 flex flex-col items-center justify-center border-4 border-slate-800">
+                            <div class="scan-line"></div>
+                            <div class="border-2 border-dashed border-white/30 w-48 h-48 flex items-center justify-center">
+                                <i class="fas fa-camera text-4xl text-white/20"></i>
+                            </div>
+                            <button class="absolute bottom-4 bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg" onclick="alert('Kamera aktif untuk Scan QR Guru/Siswa!')">
+                                Aktifkan Scanner
+                            </button>
+                        </div>
+                        
+                        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                            <div class="p-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                                <h3 class="font-bold text-slate-700">Riwayat Kehadiran</h3>
+                                <div class="admin-guru-only text-sm text-slate-500">Auto-Save Aktif</div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Hari/Tanggal/Tahun</th>
+                                            <th>Nama / Peran</th>
+                                            <th>Tipe Kehadiran</th>
+                                            <th class="admin-guru-only text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>[Hari, Tgl, Tahun] - [Waktu]</td>
+                                            <td>[Nama Guru/Siswa]</td>
+                                            <td><span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-xs font-bold">PENGAWAS UJIAN</span></td>
+                                            <td class="admin-guru-only text-center">
+                                                <button class="bg-amber-500 text-white w-8 h-8 rounded mx-1"><i class="fas fa-edit"></i></button>
+                                                <button class="bg-slate-800 text-white w-8 h-8 rounded mx-1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>[Hari, Tgl, Tahun] - [Waktu]</td>
+                                            <td>[Nama Guru/Siswa]</td>
+                                            <td><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs font-bold">KBM HARIAN</span></td>
+                                            <td class="admin-guru-only text-center">
+                                                <button class="bg-amber-500 text-white w-8 h-8 rounded mx-1"><i class="fas fa-edit"></i></button>
+                                                <button class="bg-slate-800 text-white w-8 h-8 rounded mx-1"><i class="fas fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MENU 4: BANK MATERI -->
+                <div id="menu-materi" class="panel-content hide-section fade-in">
+                    <div class="flex justify-between items-end mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-800">Bank Materi Pelajaran</h2>
+                            <p class="text-slate-500 text-sm mt-1">Akses file materi Word, Excel, PPT, Video, Gambar.</p>
+                        </div>
+                        <button class="admin-guru-only bg-primary hover:bg-primaryDark text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition flex items-center gap-2">
+                            <i class="fas fa-cloud-upload-alt"></i> Upload Materi Baru
+                        </button>
                     </div>
 
-                    <form id="form-ujian">
-                        <!-- SOAL KOSONG UNTUK GURU ISI -->
-                        
-                        <!-- Pilihan Ganda -->
-                        <div class="soal-card">
-                            <p>1. [Isi Soal Pilihan Berganda Kosong]</p>
-                            <input type="radio" name="soal1" value="A"> A. [Jawaban Kosong]<br>
-                            <input type="radio" name="soal1" value="B"> B. [Jawaban Kosong]<br>
-                            <input type="radio" name="soal1" value="C"> C. [Jawaban Kosong]<br>
-                            <input type="radio" name="soal1" value="D"> D. [Jawaban Kosong]<br>
-                        </div>
-                        
-                        <div class="soal-card">
-                            <p>2. [Isi Soal Pilihan Berganda Kosong]</p>
-                            <input type="radio" name="soal2" value="A"> A. <br>
-                            <input type="radio" name="soal2" value="B"> B. <br>
-                            <input type="radio" name="soal2" value="C"> C. <br>
-                            <input type="radio" name="soal2" value="D"> D. <br>
-                        </div>
-                        
-                        <div class="soal-card">
-                            <p>3. [Isi Soal Pilihan Berganda Kosong]</p>
-                            <input type="radio" name="soal3" value="A"> A. <br>
-                            <input type="radio" name="soal3" value="B"> B. <br>
-                            <input type="radio" name="soal3" value="C"> C. <br>
-                            <input type="radio" name="soal3" value="D"> D. <br>
-                        </div>
-
-                        <!-- Soal Isian -->
-                        <div class="soal-card">
-                            <p>4. [Isi Soal Isian Kosong]</p>
-                            <textarea class="isian" placeholder="Ketik jawaban isian di sini..."></textarea>
-                        </div>
-
-                        <button type="button" class="btn btn-success" style="width: 100%; padding: 15px; font-size: 16px;" onclick="simpanUjian()">SIMPAN JAWABANNYA</button>
-                    </form>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hari/Tanggal/Tahun</th>
+                                    <th>Judul Materi</th>
+                                    <th>Tipe File</th>
+                                    <th>Pengunggah</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>[Hari, Tgl, Tahun]</td>
+                                    <td class="font-semibold text-slate-800">[Judul Materi Pembelajaran]</td>
+                                    <td><i class="fas fa-file-word text-blue-600 mr-2"></i> Word Document</td>
+                                    <td>[Nama Guru]</td>
+                                    <td class="text-center">
+                                        <button class="bg-blue-500 hover:bg-blue-600 text-white w-8 h-8 rounded mx-1" title="Download"><i class="fas fa-download"></i></button>
+                                        <button class="admin-guru-only bg-emerald-500 hover:bg-emerald-600 text-white w-8 h-8 rounded mx-1" title="Save Info"><i class="fas fa-save"></i></button>
+                                        <button class="admin-guru-only bg-amber-500 text-white w-8 h-8 rounded mx-1" title="Edit"><i class="fas fa-edit"></i></button>
+                                        <button class="admin-guru-only bg-slate-800 text-white w-8 h-8 rounded mx-1" title="Hapus"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>[Hari, Tgl, Tahun]</td>
+                                    <td class="font-semibold text-slate-800">[Judul Presentasi]</td>
+                                    <td><i class="fas fa-file-powerpoint text-orange-500 mr-2"></i> PowerPoint</td>
+                                    <td>[Nama Guru]</td>
+                                    <td class="text-center">
+                                        <button class="bg-blue-500 hover:bg-blue-600 text-white w-8 h-8 rounded mx-1"><i class="fas fa-download"></i></button>
+                                        <button class="admin-guru-only bg-emerald-500 text-white w-8 h-8 rounded mx-1"><i class="fas fa-save"></i></button>
+                                        <button class="admin-guru-only bg-amber-500 text-white w-8 h-8 rounded mx-1"><i class="fas fa-edit"></i></button>
+                                        <button class="admin-guru-only bg-slate-800 text-white w-8 h-8 rounded mx-1"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-            <!-- PANEL 10: LAPORAN OTOMATIS (PDF/EXCEL) -->
-            <div id="panel-laporan" class="panel staff-only">
-                <h3 class="section-title">Laporan Otomatis Nilai Siswa</h3>
-                <p>Kalkulasi Otomatis: (Total Soal = 4) → (Benar / 4) * 100 = Nilai Akhir</p>
-                <div style="margin-top: 15px; margin-bottom: 15px;">
-                    <button class="btn btn-danger" onclick="exportPDF()">Unduh Laporan PDF</button>
-                    <button class="btn btn-success" onclick="exportExcel()">Unduh Laporan EXCEL</button>
+                <!-- MENU 5: PORTAL UJIAN (PRE-EXAM & RUNNING) -->
+                <div id="menu-ujian" class="panel-content hide-section fade-in">
+                    
+                    <!-- Pre-Exam View -->
+                    <div id="exam-lobby" class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 text-center max-w-2xl mx-auto mt-10">
+                        <i class="fas fa-file-signature text-6xl text-primary mb-6"></i>
+                        <h2 class="text-3xl font-bold text-slate-800 mb-2">Lembar Ujian Elektronik</h2>
+                        <p class="text-slate-500 mb-6">Ujian akan mengaktifkan sistem keamanan ketat (Anti-Foto, Anti-Rekam, Kunci Tab).</p>
+                        
+                        <div class="bg-slate-50 p-4 rounded-lg text-left border border-slate-200 mb-8 space-y-2 text-sm text-slate-700">
+                            <p><strong>Mata Pelajaran:</strong> [Nama Ujian]</p>
+                            <p><strong>Waktu Ditetapkan Guru:</strong> <span id="set-duration">60</span> Menit</p>
+                            <p><strong>Jumlah Soal:</strong> 4 Soal (3 Pilihan Berganda, 1 Isian)</p>
+                        </div>
+                        
+                        <button onclick="mulaiUjian()" class="bg-primary hover:bg-primaryDark text-white font-bold py-4 px-10 rounded-full shadow-lg transition-transform transform hover:scale-105">
+                            MULAI KERJAKAN SOAL
+                        </button>
+                    </div>
+
+                    <!-- Exam Running View -->
+                    <div id="exam-running" class="hide-section max-w-4xl mx-auto prevent-select pb-20">
+                        
+                        <form id="form-ujian" class="space-y-6">
+                            
+                            <!-- Pilihan Ganda 1-3 -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                <p class="font-bold text-slate-800 mb-4 text-lg">1. [Input teks soal pilihan berganda pertama oleh guru...]</p>
+                                <div class="space-y-3 pl-2">
+                                    <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition">
+                                        <input type="radio" name="soal1" value="A" class="w-5 h-5 text-primary"> <span class="text-slate-700">A. [Opsi Jawaban A]</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition">
+                                        <input type="radio" name="soal1" value="B" class="w-5 h-5 text-primary"> <span class="text-slate-700">B. [Opsi Jawaban B]</span>
+                                    </label>
+                                    <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg cursor-pointer hover:bg-slate-50 transition">
+                                        <input type="radio" name="soal1" value="C" class="w-5 h-5 text-primary"> <span class="text-slate-700">C. [Opsi Jawaban C]</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <!-- Repeat PG Box for Demo -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                <p class="font-bold text-slate-800 mb-4 text-lg">2. [Input teks soal pilihan berganda kedua oleh guru...]</p>
+                                <div class="space-y-3 pl-2">
+                                    <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg cursor-pointer"><input type="radio" name="soal2" value="A" class="w-5 h-5 text-primary"> <span class="text-slate-700">A. [Opsi]</span></label>
+                                    <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg cursor-pointer"><input type="radio" name="soal2" value="B" class="w-5 h-5 text-primary"> <span class="text-slate-700">B. [Opsi]</span></label>
+                                    <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg cursor-pointer"><input type="radio" name="soal2" value="C" class="w-5 h-5 text-primary"> <span class="text-slate-700">C. [Opsi]</span></label>
+                                </div>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                <p class="font-bold text-slate-800 mb-4 text-lg">3. [Input teks soal pilihan berganda ketiga oleh guru...]</p>
+                                <div class="space-y-3 pl-2">
+                                    <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg cursor-pointer"><input type="radio" name="soal3" value="A" class="w-5 h-5 text-primary"> <span class="text-slate-700">A. [Opsi]</span></label>
+                                    <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg cursor-pointer"><input type="radio" name="soal3" value="B" class="w-5 h-5 text-primary"> <span class="text-slate-700">B. [Opsi]</span></label>
+                                    <label class="flex items-center gap-3 p-3 border border-slate-200 rounded-lg cursor-pointer"><input type="radio" name="soal3" value="C" class="w-5 h-5 text-primary"> <span class="text-slate-700">C. [Opsi]</span></label>
+                                </div>
+                            </div>
+
+                            <!-- Soal Isian -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                                <p class="font-bold text-slate-800 mb-4 text-lg">4. [Input teks soal ISIAN oleh guru...]</p>
+                                <textarea name="soal4" class="w-full border border-slate-300 rounded-lg p-4 h-32 focus:ring-2 focus:ring-primary outline-none text-slate-700" placeholder="Ketik jawaban di sini..."></textarea>
+                            </div>
+
+                            <button type="button" onclick="kumpulkanUjian()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-lg py-5 rounded-xl shadow-lg transition-transform transform hover:scale-[1.01] flex justify-center items-center gap-3">
+                                <i class="fas fa-check-circle text-2xl"></i> SIMPAN JAWABANNYA
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nama Siswa</th>
-                            <th>Mata Pelajaran</th>
-                            <th>Jawaban Benar</th>
-                            <th>Jawaban Salah</th>
-                            <th>Nilai (100)</th>
-                            <th class="staff-only">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabel-laporan">
-                        <!-- Data ini akan disimulasikan dari ujian -->
-                        <tr>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td>[Kosong]</td>
-                            <td class="action-cell staff-only">
-                                <button class="btn btn-success">SAVE</button>
-                                <button class="btn btn-warning">EDIT</button>
-                                <button class="btn btn-danger">HAPUS</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
 
-        </div>
+                <!-- MENU 6: LAPORAN NILAI (ADMIN/GURU ONLY) -->
+                <div id="menu-laporan" class="panel-content hide-section fade-in">
+                    <div class="flex justify-between items-end mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-800">Laporan Otomatis Nilai Ujian</h2>
+                            <p class="text-slate-500 text-sm mt-1">Kalkulasi 4 Soal (Skala 100).</p>
+                        </div>
+                        <button onclick="exportLaporan()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition flex items-center gap-2">
+                            <i class="fas fa-file-excel"></i> Ekspor ke Excel (CSV)
+                        </button>
+                    </div>
+
+                    <!-- Layout Nilai Terbaru (Mockup) -->
+                    <div id="laporan-hasil-terbaru" class="hide-section mb-6 bg-gradient-to-r from-slate-800 to-slate-900 rounded-xl shadow-lg p-6 text-white flex justify-between items-center">
+                        <div>
+                            <p class="text-slate-400 text-sm uppercase tracking-wider font-bold mb-1">Hasil Ujian Terakhir (Simulasi)</p>
+                            <h3 class="text-2xl font-bold" id="lap-nama">[Nama Siswa]</h3>
+                        </div>
+                        <div class="flex gap-8 text-center">
+                            <div><p class="text-slate-400 text-xs uppercase">Benar</p><p class="text-2xl font-bold text-emerald-400" id="lap-benar">0</p></div>
+                            <div><p class="text-slate-400 text-xs uppercase">Salah</p><p class="text-2xl font-bold text-red-400" id="lap-salah">0</p></div>
+                            <div class="border-l border-white/20 pl-8"><p class="text-slate-400 text-xs uppercase">Nilai Akhir</p><p class="text-4xl font-bold text-primary" id="lap-nilai">0</p></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hari/Tgl</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Mata Ujian</th>
+                                    <th>Benar</th>
+                                    <th>Salah</th>
+                                    <th>Nilai (100)</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>[Tgl]</td>
+                                    <td>[Nama Siswa]</td>
+                                    <td>[Mata Ujian]</td>
+                                    <td>[Benar]</td>
+                                    <td>[Salah]</td>
+                                    <td class="font-bold text-primary">[Nilai]</td>
+                                    <td class="text-center">
+                                        <button class="bg-amber-500 text-white w-8 h-8 rounded mx-1"><i class="fas fa-edit"></i></button>
+                                        <button class="bg-slate-800 text-white w-8 h-8 rounded mx-1"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
     </div>
 
-    <!-- ================= SCRIPT JAVASCRIPT ================= -->
+    <!-- AUDIO ANTI-CHEAT (Synthesizer/Oscillator agar mandiri tanpa file mp3) -->
     <script>
-        let currentRole = '';
-        let timerInterval;
-        let isExamActive = false;
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function mainkanAlarmCurang() {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime); // Frekuensi tinggi
+            osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.5);
+            
+            gain.gain.setValueAtTime(1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 1);
+        }
+    </script>
 
-        // 1. Fungsi Dropdown Form Login
-        function toggleGuruList() {
-            let role = document.getElementById('role-select').value;
-            document.getElementById('guru-list').style.display = (role === 'guru') ? 'block' : 'none';
-            document.getElementById('admin-list').style.display = (role === 'admin') ? 'block' : 'none';
+    <!-- LOGIKA SISTEM JAVASCRIPT -->
+    <script>
+        // State Variabel
+        let currentUserRole = '';
+        let currentUserName = '';
+        let isUjianAktif = false;
+        let timerInterval;
+
+        // --- SISTEM LOGIN & HAK AKSES ---
+        function toggleTeacherSelect() {
+            const role = document.getElementById('login-role').value;
+            document.getElementById('teacher-select-group').classList.toggle('hide-section', role !== 'guru');
+            document.getElementById('admin-select-group').classList.toggle('hide-section', role !== 'admin');
+            document.getElementById('login-username').placeholder = (role === 'siswa') ? 'Masukkan NIS Siswa' : 'Masukkan Username/NIP';
         }
 
-        // 2. Fungsi Login
-        function doLogin() {
-            currentRole = document.getElementById('role-select').value;
-            let displayName = document.getElementById('username').value;
+        function prosesLogin() {
+            currentUserRole = document.getElementById('login-role').value;
             
-            if(currentRole === 'guru') displayName = document.getElementById('guru-name').value;
-            if(currentRole === 'admin') displayName = document.getElementById('admin-name').value;
-            if(!displayName) displayName = "Pengguna Sistem";
+            // Set Display Name
+            if (currentUserRole === 'guru') currentUserName = document.getElementById('login-teacher').value;
+            else if (currentUserRole === 'admin') currentUserName = document.getElementById('login-admin').value;
+            else currentUserName = document.getElementById('login-username').value || "Siswa Assisi";
 
-            // Sembunyikan elemen yang hanya untuk guru/admin jika login sebagai siswa
-            let staffElements = document.querySelectorAll('.staff-only');
+            if(currentUserRole === 'siswa' && !currentUserName) {
+                alert("Harap masukkan NIS/Username!"); return;
+            }
+
+            // Atur UI Dashboard
+            document.getElementById('display-name').innerText = currentUserName;
+            document.getElementById('badge-role').innerText = currentUserRole;
+            
+            // Konfigurasi Hak Akses Elemen (Tampilkan khusus admin/guru)
+            const staffElements = document.querySelectorAll('.admin-guru-only');
             staffElements.forEach(el => {
-                el.style.display = (currentRole === 'admin' || currentRole === 'guru') ? 'inline-block' : 'none';
-                if(el.tagName === 'DIV' || el.tagName === 'TH' || el.tagName === 'TD') {
-                     el.style.display = (currentRole === 'admin' || currentRole === 'guru') ? (el.tagName==='TH'||el.tagName==='TD'?'table-cell':'flex') : 'none';
-                }
+                if (currentUserRole === 'siswa') el.classList.add('hide-section');
+                else el.classList.remove('hide-section');
             });
 
-            document.getElementById('welcome-text').innerText = "Selamat Datang, " + displayName;
-            document.getElementById('user-display').innerText = "Akses: " + currentRole.toUpperCase();
+            // Transisi View
+            document.getElementById('view-login').classList.add('hide-section');
+            document.getElementById('view-dashboard').classList.remove('hide-section');
             
-            document.getElementById('login-page').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'flex';
-            
-            switchPanel('panel-home');
+            // Default Menu
+            navigasi('menu-home', document.querySelector('.nav-btn'));
         }
 
-        function logout() {
-            if(isExamActive) {
-                alert("Anda tidak bisa KELUAR saat ujian berlangsung!");
-                triggerAntiCheatAlarm();
+        function prosesLogout() {
+            if (isUjianAktif) {
+                picuPelanggaran("DILARANG KELUAR SISTEM SAAT UJIAN BERLANGSUNG!");
                 return;
             }
             location.reload();
         }
 
-        // 3. Sistem Navigasi Panel (Dengan Anti-Cheat HOME)
-        function switchPanel(panelId) {
-            if (isExamActive && panelId !== 'panel-ujian' && currentRole === 'siswa') {
-                triggerAntiCheatAlarm();
-                alert("PELANGGARAN! Dilarang KEMBALI KE HOME atau tab lain saat ujian berlangsung!");
+        // --- NAVIGASI SPA ---
+        function navigasi(menuId, btnElement) {
+            // Cek Kunci Ujian
+            if (isUjianAktif && menuId !== 'menu-ujian') {
+                picuPelanggaran("PELANGGARAN: Anda mencoba kembali ke HOME/Menu saat Ujian!");
                 return;
             }
 
-            // Atur class active untuk navigasi UI
-            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(panelId).classList.add('active');
-            
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            document.querySelectorAll('.panel-content').forEach(el => el.classList.add('hide-section'));
+            document.getElementById(menuId).classList.remove('hide-section');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-red-50', 'text-primary');
+                btn.classList.add('text-slate-600');
+            });
+            if(btnElement) {
+                btnElement.classList.remove('text-slate-600');
+                btnElement.classList.add('bg-red-50', 'text-primary');
+            }
         }
 
-        // 4. Sistem Ujian Otomatis (Timer & Simpan Sendiri)
+        // --- SISTEM UJIAN & TIMER ---
         function mulaiUjian() {
-            isExamActive = true;
-            document.getElementById('ujian-persiapan').style.display = 'none';
-            document.getElementById('ujian-berlangsung').style.display = 'block';
+            // Minta Fullscreen (opsional tapi profesional)
+            if (document.documentElement.requestFullscreen) { document.documentElement.requestFullscreen().catch(e => console.log(e)); }
 
-            // Waktu ditentukan (Misal 90 menit)
-            let duration = 90 * 60; 
-            let display = document.getElementById('timer-display');
+            document.getElementById('exam-lobby').classList.add('hide-section');
+            document.getElementById('exam-running').classList.remove('hide-section');
+            document.getElementById('topbar-warning').classList.remove('hide-section');
+            
+            isUjianAktif = true;
+            
+            let totalDetik = parseInt(document.getElementById('set-duration').innerText) * 60;
+            const display = document.getElementById('timer-display');
 
-            timerInterval = setInterval(function () {
-                let minutes = parseInt(duration / 60, 10);
-                let seconds = parseInt(duration % 60, 10);
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                display.textContent = minutes + ":" + seconds;
-
-                if (--duration < 0) {
+            timerInterval = setInterval(() => {
+                let m = Math.floor(totalDetik / 60);
+                let s = totalDetik % 60;
+                display.innerText = (m < 10 ? "0"+m : m) + ":" + (s < 10 ? "0"+s : s);
+                
+                if (totalDetik <= 0) {
                     clearInterval(timerInterval);
-                    alert("Waktu Habis! Soal otomatis disimpan sendiri.");
-                    simpanUjian();
+                    alert("WAKTU HABIS! Sistem menyimpan jawaban secara otomatis.");
+                    kumpulkanUjian();
                 }
+                totalDetik--;
             }, 1000);
         }
 
-        function simpanUjian() {
-            isExamActive = false;
+        function kumpulkanUjian() {
+            isUjianAktif = false;
             clearInterval(timerInterval);
+            document.getElementById('topbar-warning').classList.add('hide-section');
+            if (document.exitFullscreen) { document.exitFullscreen().catch(e=>console.log(e)); }
+
+            // Logika Laporan Otomatis (4 Soal = 100. Per soal bobot 25)
+            const form = document.getElementById('form-ujian');
+            const formData = new FormData(form);
             
-            // Kalkulasi nilai berdasarkan rule: 4 soal = nilai 100
-            // (Logika simulasi: anggap soal terjawab benar 3, salah 1)
-            let benar = 3; 
-            let salah = 1;
-            let nilai = (benar / 4) * 100; // Formula sesuai permintaan
+            let benar = 0; let salah = 0;
             
-            alert("Jawaban berhasil DISIMPAN. Nilai Anda sedang diproses oleh sistem.");
-            document.getElementById('ujian-berlangsung').style.display = 'none';
-            document.getElementById('ujian-persiapan').style.display = 'block';
-            document.getElementById('ujian-persiapan').innerHTML = "<h2 style='color:var(--success)'>Ujian Telah Selesai Dikerjakan!</h2>";
+            // Simulasi hitung sederhana (menganggap setiap input yang terisi adalah benar untuk demo UI)
+            for(let i=1; i<=4; i++) {
+                let jwb = formData.get('soal'+i);
+                if (jwb && jwb.trim() !== '') benar++;
+                else salah++;
+            }
+            let nilai = benar * 25;
+
+            // Render ke UI Laporan
+            document.getElementById('lap-nama').innerText = currentUserName;
+            document.getElementById('lap-benar').innerText = benar;
+            document.getElementById('lap-salah').innerText = salah;
+            document.getElementById('lap-nilai').innerText = nilai;
+            
+            // Pindah View
+            alert("Ujian Selesai! Mengarahkan ke halaman laporan nilai...");
+            
+            // Jika siswa, buka akses ke panel laporan (override sifat hide default)
+            document.getElementById('menu-laporan').classList.remove('hide-section');
+            document.getElementById('laporan-hasil-terbaru').classList.remove('hide-section');
+            navigasi('menu-laporan', null);
+            document.getElementById('exam-lobby').classList.remove('hide-section');
+            document.getElementById('exam-running').classList.add('hide-section');
         }
 
-        // 5. Fitur Anti-Kecurangan Siswa (Bunyi & Blokir)
-        function triggerAntiCheatAlarm() {
-            // Menggunakan Web Speech API untuk membunyikan suara komputer
-            let speech = new SpeechSynthesisUtterance("Peringatan, pelanggaran terdeteksi! Dilarang memfoto soal atau keluar ujian!");
-            speech.lang = "id-ID";
-            speech.volume = 1;
-            speech.rate = 1.1;
-            window.speechSynthesis.speak(speech);
+        // --- SISTEM ANTI CHEAT KETAT ---
+        function picuPelanggaran(pesan) {
+            mainkanAlarmCurang();
+            alert("🚨 " + pesan);
         }
 
-        // A. Deteksi pindah tab browser / minimize
+        // 1. Deteksi Pindah Tab / Layar Mati (Blur & Visibility)
+        document.addEventListener("visibilitychange", () => {
+            if (document.hidden && isUjianAktif) {
+                picuPelanggaran("SISTEM MENDETEKSI PERPINDAHAN TAB / LAYAR KELUAR! Pelanggaran dicatat.");
+            }
+        });
         window.addEventListener("blur", () => {
-            if (isExamActive && currentRole === 'siswa') {
-                triggerAntiCheatAlarm();
-                alert("PELANGGARAN! Anda terdeteksi keluar dari layar ujian!");
+            if (isUjianAktif) picuPelanggaran("PERINGATAN: Jangan membuka aplikasi lain selama ujian!");
+        });
+
+        // 2. Blokir Klik Kanan (Anti Inspect Element)
+        document.addEventListener("contextmenu", (e) => {
+            if (isUjianAktif) {
+                e.preventDefault();
+                picuPelanggaran("Klik kanan (Inspect/Copy) dikunci selama ujian.");
             }
         });
 
-        // B. Deteksi Klik Kanan (Mencegah Inspect / Simpan gambar)
-        document.addEventListener("contextmenu", event => {
-            if (isExamActive && currentRole === 'siswa') {
-                event.preventDefault();
-                triggerAntiCheatAlarm();
-                alert("DILARANG KLIK KANAN ATAU COPY SOAL!");
-            }
-        });
-
-        // C. Deteksi Shortcut Keyboard (Print Screen / Ctrl+C)
+        // 3. Blokir Tombol Keyboard (Screenshot, Copy, Save, Print)
         document.addEventListener("keydown", (e) => {
-            if (isExamActive && currentRole === 'siswa') {
-                if (e.key === 'PrintScreen' || (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'p'))) {
+            if (isUjianAktif) {
+                if (e.key === 'PrintScreen' || (e.ctrlKey && ['c', 'v', 'p', 's'].includes(e.key.toLowerCase()))) {
                     e.preventDefault();
-                    triggerAntiCheatAlarm();
-                    alert("TINDAKAN MEREKAM ATAU FOTO SOAL DILARANG KERAS!");
+                    navigator.clipboard.writeText(''); // Kosongkan memori clipboard paksa
+                    picuPelanggaran("TINDAKAN ILEGAL: Fitur Screenshot, Copy-Paste, dan Print dinonaktifkan!");
                 }
             }
         });
 
-        // 6. Fungsi Export Laporan Otomatis (Untuk Admin/Guru)
-        function exportPDF() {
-            alert("Sistem mengkonversi data ke file PDF. Laporan berhasil dibuat dan bisa dijalankan!");
-            // Di lingkungan production, ini disambungkan ke library jsPDF
-            window.print(); 
-        }
-
-        function exportExcel() {
-            alert("Mengekspor Laporan ke format Excel (.xlsx). Laporan berhasil dibuat!");
-            // Simulasi download CSV untuk Excel
-            let csvContent = "data:text/csv;charset=utf-8,Nama,Mapel,Benar,Salah,Nilai\nSiswa 1,Matematika,4,0,100";
+        // --- EXPORT LAPORAN EXCEL (CSV) ---
+        function exportLaporan() {
+            const dataNilai = [
+                ["Hari/Tanggal", "Nama Siswa", "Mata Ujian", "Benar", "Salah", "Nilai Akhir"],
+                [new Date().toLocaleDateString('id-ID'), currentUserName, "Ujian Simulasi", document.getElementById('lap-benar').innerText, document.getElementById('lap-salah').innerText, document.getElementById('lap-nilai').innerText]
+            ];
+            
+            let csvContent = "data:text/csv;charset=utf-8," + dataNilai.map(e => e.join(",")).join("\n");
             let encodedUri = encodeURI(csvContent);
             let link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Laporan_Nilai.csv");
+            link.setAttribute("download", "Laporan_Ujian_Assisi.csv");
             document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
